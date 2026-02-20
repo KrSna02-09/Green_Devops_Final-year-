@@ -1,0 +1,15 @@
+ # Ignore the virtual environment folder
+venv/
+env/
+.venv/
+
+# Ignore compiled python files
+__pycache__/
+*.pyc
+
+# Ignore local database files (optional, but recommended)
+*.db
+*.sqlite3
+
+# Ignore OS generated files
+.DS_Store
