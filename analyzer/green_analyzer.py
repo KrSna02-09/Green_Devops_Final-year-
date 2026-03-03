@@ -103,7 +103,7 @@ if __name__ == "__main__":
         Gauge('green_devops_energy_kwh', 'Energy Use', registry=registry).set(metrics['energy_kwh'])
         Gauge('green_devops_smells', 'Code Smells', registry=registry).set(smell_count)
         
-        push_to_gateway('localhost:9091', job=f'commit_{commit_hash[:7]}', registry=registry)
+        push_to_gateway('65.2.30.225:9091', job=f'commit_{commit_hash[:7]}', registry=registry)
         console.print("[bold cyan]🚀 Metrics successfully pushed to Grafana![/bold cyan]")
     except Exception as e:
         console.print(f"[bold red]⚠️ Grafana telemetry push failed: {e}[/bold red]")

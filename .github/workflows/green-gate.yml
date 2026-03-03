@@ -6,13 +6,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          
       - name: Install dependencies
         run: |
-          pip install rich psutil
+          pip install rich psutil prometheus_client
+          
       - name: Run Green Analyzer
+        env:
+          AWS_IP: ${{ secrets.AWS_IP }}
         run: |
-          python analyzer/green_analyzer.py test_code.py
+          python analyzer/green_analyzer.py
