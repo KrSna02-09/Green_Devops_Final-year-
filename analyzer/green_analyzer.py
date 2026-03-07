@@ -62,6 +62,25 @@ def analyze_file(filepath):
     return analyzer.reports
 
 # --- NEW FEATURE: Universal Subprocess Execution ---
+
+def measure_subprocess_impact(filepath):
+    start_time = time.perf_counter()
+    try:
+        # Added text=True to easily read the error output
+        subprocess.run([sys.executable, filepath], check=True, capture_output=True, text=True)
+    except subprocess.CalledProcessError as e:
+        console.print(f"[bold yellow]⚠️ Target script had internal errors, but energy was still measured.[/bold yellow]")
+        console.print(f"[bold red]Detailed Crash Log from {filepath}:[/bold red]")
+        console.print(f"[red]{e.stderr}[/red]")  # <--- This will print the exact bug!
+    except Exception as e:
+        console.print(f"[bold red]⚠️ Execution failed: {e}[/bold red]")
+        
+    end_time = time.perf_counter()
+    duration_sec = end_time - start_time
+    duration_hours = duration_sec / 3600
+    energy_kwh = (AVG_CPU_POWER_W / 1000) * duration_hours
+    carbon_emitted_mg = (energy_kwh * CARBON_INTENSITY_G_KWH) * 1000
+    return {"duration": round(duration_sec, 4), "energy_kwh": energy_kwh, "co2_mg": round(carbon_emitted_mg, 4)}
 def measure_subprocess_impact(filepath):
     start_time = time.perf_counter()
     try:
