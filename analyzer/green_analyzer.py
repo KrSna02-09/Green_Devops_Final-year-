@@ -62,7 +62,6 @@ def analyze_file(filepath):
     return analyzer.reports
 
 # --- NEW FEATURE: Universal Subprocess Execution ---
-
 def measure_subprocess_impact(filepath):
     start_time = time.perf_counter()
     try:
@@ -72,22 +71,6 @@ def measure_subprocess_impact(filepath):
         console.print(f"[bold yellow]⚠️ Target script had internal errors, but energy was still measured.[/bold yellow]")
         console.print(f"[bold red]Detailed Crash Log from {filepath}:[/bold red]")
         console.print(f"[red]{e.stderr}[/red]")  # <--- This will print the exact bug!
-    except Exception as e:
-        console.print(f"[bold red]⚠️ Execution failed: {e}[/bold red]")
-        
-    end_time = time.perf_counter()
-    duration_sec = end_time - start_time
-    duration_hours = duration_sec / 3600
-    energy_kwh = (AVG_CPU_POWER_W / 1000) * duration_hours
-    carbon_emitted_mg = (energy_kwh * CARBON_INTENSITY_G_KWH) * 1000
-    return {"duration": round(duration_sec, 4), "energy_kwh": energy_kwh, "co2_mg": round(carbon_emitted_mg, 4)}
-def measure_subprocess_impact(filepath):
-    start_time = time.perf_counter()
-    try:
-        # Dynamically execute ANY script passed to the analyzer
-        subprocess.run([sys.executable, filepath], check=True, capture_output=True)
-    except subprocess.CalledProcessError:
-        console.print(f"[bold yellow]⚠️ Target script had internal errors, but energy was still measured.[/bold yellow]")
     except Exception as e:
         console.print(f"[bold red]⚠️ Execution failed: {e}[/bold red]")
         
@@ -142,6 +125,7 @@ if __name__ == "__main__":
     table = Table(title=f"Execution Sustainability Metrics: {target_file}")
     table.add_column("Metric", style="cyan")
     table.add_column("Value", style="yellow")
+    table.add_row("Commit ID", commit_hash[:7]) # <--- ADDED HERE AT THE CORRECT TIME
     table.add_row("Code Smells Found", str(smell_count))
     table.add_row("Execution Time", f"{metrics['duration']} seconds")
     table.add_row("Estimated Energy", f"{metrics['energy_kwh']:.8f} kWh")
