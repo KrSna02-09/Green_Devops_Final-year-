@@ -139,7 +139,7 @@ if __name__ == "__main__":
     score -= (smell_count * 15)
 
     console.print("\n[bold]---- CI/CD Quality Gate ----[/bold]")
-    if score >= 50:
+    if score >= 80:
         console.print(f"[bold green]✅ PASSED! Sustainability Score: {score}/100[/bold green]")
         sys.exit(0)
     else:
